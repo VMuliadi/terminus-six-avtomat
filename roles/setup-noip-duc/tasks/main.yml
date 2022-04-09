@@ -1,0 +1,37 @@
+---
+- name: clone github repository
+  git:
+    clone: yes
+    dest: "{{ download_dir }}/no-ip"
+    repo: "https://github.com/theonemule/no-ip"
+
+- name: copy main script
+  copy:
+    owner: root
+    group: root
+    mode: preserve
+    remote_src: yes
+    dest: "/usr/sbin/no-ip.sh"
+    src: "{{ download_dir }}/no-ip/no-ip.sh"
+
+- name: setup credentials
+  template:
+    mode: 0644
+    owner: root
+    group: root
+    src: 'no-ip.conf'
+    dest: '/etc/no-ip/no-ip.conf'
+
+- name: setup crontab job
+  cron:
+    user: root
+    minute: '*/10'
+    state: present
+    name: no-ip ddns update
+    job: '/usr/sbin/no-ip.sh'
+
+- name: cleanup job
+  file:
+    force: yes
+    state: absent
+    path: '{{ download_dir }}/no-ip/'

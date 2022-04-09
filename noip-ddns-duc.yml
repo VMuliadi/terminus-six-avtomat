@@ -1,0 +1,12 @@
+---
+- name: deploy no-ip dynamic dns
+  hosts: '{{ host }}'
+  become: yes
+  vars:
+    download_dir: '/home/pi/Downloads'
+
+  vars_files:
+    - credentials.yml
+
+  roles:
+    - { role: setup-noip-duc }
