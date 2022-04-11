@@ -3,7 +3,7 @@
   hosts: '{{ host }}'
   become: yes
   vars:
-    download_dir: '/home/pi/Downloads'
+    download_dir: '~'
 
   vars_files:
     - credentials.yml
